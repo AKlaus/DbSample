@@ -11,8 +11,8 @@ public class Client
 	[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 	public long Id { get; set; }
 	
-	[Column(TypeName = "nvarchar(max)")]
-	public string Name { get; set; }
-	
-	public virtual ICollection<Invoice> Invoices { get; set; }
+	[Column(TypeName = "nvarchar(500)")]
+	public string Name { get; set; } = null!;
+
+	public virtual ICollection<Invoice> Invoices { get; set; } = null!;
 }
