@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<AssemblyName>AK.DbSample.Database</AssemblyName>
+		<RootNamespace>AK.DbSample.Database</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.3" />
+	</ItemGroup>
+
+</Project>
