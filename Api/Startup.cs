@@ -20,8 +20,10 @@ public class Startup
 		var settings = services.AddAndConfigureAppSettings(_configuration);
 		
 		services.AddAndConfigureDomainServices((settings.ConnectionString, true));
-		
-		services.AddControllers();
+
+		services
+			.AddControllers(options => options.UseDateOnlyTimeOnlyStringConverters())
+			.AddJsonOptions(options => options.UseDateOnlyTimeOnlyStringConverters());
 
 		services.AddAndConfigureSwagger(_hostingEnvironment);
 	}

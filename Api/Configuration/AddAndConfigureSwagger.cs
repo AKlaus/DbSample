@@ -9,7 +9,7 @@ internal static partial class ServiceCollectionExtensions
 			return;
 
 		services.AddEndpointsApiExplorer();
-		services.AddSwaggerGen();
+		services.AddSwaggerGen(c => c.UseDateOnlyTimeOnlyStringConverters());
 	}
 	
 	public static void AddAppSwaggerUi(this IApplicationBuilder app, IWebHostEnvironment env)

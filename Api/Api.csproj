@@ -6,6 +6,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="DateOnlyTimeOnly.AspNet" Version="1.0.2" />
+		<PackageReference Include="DateOnlyTimeOnly.AspNet.Swashbuckle" Version="1.0.2" />
 		<PackageReference Include="DomainResult" Version="2.0.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.3">
 		  <PrivateAssets>all</PrivateAssets>
