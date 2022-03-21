@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
 namespace AK.DbSample.Database.Entities;
@@ -7,7 +8,10 @@ namespace AK.DbSample.Database.Entities;
 public class Client
 {
 	[Key]
+	[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 	public long Id { get; set; }
+	
+	[Column(TypeName = "nvarchar(max)")]
 	public string Name { get; set; }
 	
 	public virtual ICollection<Invoice> Invoices { get; set; }
