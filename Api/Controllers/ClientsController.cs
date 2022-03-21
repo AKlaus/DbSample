@@ -11,7 +11,7 @@ public class ClientsController : ControllerBase
 {
 	[HttpGet]
 	[ProducesResponseType(StatusCodes.Status200OK)]
-	public async Task<GetClientListResponse[]> GetList([FromServices] IClientQueryService service, GetClientListRequest request)
+	public async Task<GetClientListResponse[]> GetList([FromServices] IClientQueryService service, [FromQuery] GetClientListRequest request)
 		=> await service.GetList(request);
 	
 	[HttpGet("{clientId}")]

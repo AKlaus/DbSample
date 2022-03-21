@@ -11,7 +11,7 @@ public class InvoicesController : ControllerBase
 {
 	[HttpGet]
 	[ProducesResponseType(StatusCodes.Status200OK)]
-	public async Task<GetInvoiceListResponse[]> GetList([FromServices] IInvoiceQueryService service, GetInvoiceListRequest request)
+	public async Task<GetInvoiceListResponse[]> GetList([FromServices] IInvoiceQueryService service, [FromQuery] GetInvoiceListRequest request)
 		=> await service.GetList(request);
 	
 	[HttpGet("{number}")]
