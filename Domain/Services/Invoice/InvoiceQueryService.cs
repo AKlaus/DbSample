@@ -17,7 +17,9 @@ public class InvoiceQueryService: BaseService, IInvoiceQueryService
 
 	public async Task<(GetInvoiceByNumberResponse, IDomainResult)> GetByNumber(string number)
 	{
-		var invoice = await DataContext.Invoices.SingleOrDefaultAsync(c => c.Number == number);
+		var invoice = await DataContext.Invoices
+				.Include(i => i.Client)
+				.SingleOrDefaultAsync(c => c.Number == number);
 		if (invoice == null)
 			return IDomainResult.NotFound<GetInvoiceByNumberResponse>("Invoice not found");
 
@@ -32,7 +34,9 @@ public class InvoiceQueryService: BaseService, IInvoiceQueryService
 	
 	public async Task<GetInvoiceListResponse[]> GetList(GetInvoiceListRequest filter)
 	{
-		var query = DataContext.Invoices.Select(i => i);
+		var query = DataContext.Invoices
+				.Include(i => i.Client)
+				.Select(i => i);
 		if (filter.ClientId != null)
 			query = query.Where(i => i.ClientId == filter.ClientId);
 

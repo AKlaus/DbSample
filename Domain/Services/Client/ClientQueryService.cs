@@ -17,7 +17,9 @@ public class ClientQueryService: BaseService, IClientQueryService
 
 	public async Task<(GetClientByIdResponse, IDomainResult)> GetById(long clientId)
 	{
-		var client = await DataContext.Clients.SingleOrDefaultAsync(c => c.Id == clientId);
+		var client = await DataContext.Clients
+				.Include(c => c.Invoices)
+				.SingleOrDefaultAsync(c => c.Id == clientId);
 		if (client == null)
 			return IDomainResult.NotFound<GetClientByIdResponse>("Client not found");
 
@@ -28,12 +30,15 @@ public class ClientQueryService: BaseService, IClientQueryService
 	
 	public async Task<GetClientListResponse[]> GetList(GetClientListRequest filter)
 	{
-		var query = DataContext.Clients.Select(c =>
-			new GetClientListResponse(
-				c.Id, 
-				c.Name,
-				c.Invoices.OrderByDescending(i => i.Date).Select(i => i.Date).FirstOrDefault()
-			));
+		var query = from c in DataContext.Clients.Include(c => c.Invoices)
+				select new GetClientListResponse(
+						c.Id, 
+						c.Name,
+						c.Invoices
+							.OrderByDescending(i => i.Date)
+							.Take(1)
+							.SingleOrDefault().Date
+					);
 
 		if (!string.IsNullOrWhiteSpace(filter.Name))
 			query = query.Where(c => c.Name.StartsWith(filter.Name));
