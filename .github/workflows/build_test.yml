@@ -1,0 +1,38 @@
+name: Build & test back-end
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+        
+    - name: Install dotnet-ef
+      run: dotnet tool install --global dotnet-ef
+    
+    - name: Restore dependencies
+      run: dotnet restore
+      
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+      
+    - name: Generate creation and migrations script
+      run: dotnet ef migrations script -i -o CreateOrMigrateDatabase.sql --project Database/Database.csproj --startup-project Api/Api.csproj --context DataContext -v
+
+    - name: Launch SQL Server under Docker and create DB schema
+      run: sh ./devops/start_docker_sql_server_with_new_db.sh CreateOrMigrateDatabase.sql
+      shell: bash
+        
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
