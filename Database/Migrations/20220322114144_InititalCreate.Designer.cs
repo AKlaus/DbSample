@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AK.DbSample.Database.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220321063531_InititalCreate")]
+    [Migration("20220322114144_InititalCreate")]
     partial class InititalCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -34,11 +34,11 @@ namespace AK.DbSample.Database.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex(new[] { "Name" }, "Idx_Client_Name_Unique")
+                    b.HasIndex(new[] { "Name" }, "IX_Client_Name_Unique")
                         .IsUnique();
 
                     b.ToTable("Clients");

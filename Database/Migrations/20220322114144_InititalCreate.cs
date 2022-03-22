@@ -15,7 +15,7 @@ namespace AK.DbSample.Database.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(100)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -43,7 +43,7 @@ namespace AK.DbSample.Database.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "Idx_Client_Name_Unique",
+                name: "IX_Client_Name_Unique",
                 table: "Clients",
                 column: "Name",
                 unique: true);

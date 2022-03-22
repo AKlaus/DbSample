@@ -32,11 +32,11 @@ namespace AK.DbSample.Database.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex(new[] { "Name" }, "Idx_Client_Name_Unique")
+                    b.HasIndex(new[] { "Name" }, "IX_Client_Name_Unique")
                         .IsUnique();
 
                     b.ToTable("Clients");
