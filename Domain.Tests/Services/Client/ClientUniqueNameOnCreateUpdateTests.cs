@@ -1,6 +1,6 @@
 using AK.DbSample.Domain.Services.Client;
 using AK.DbSample.Domain.Services.Client.DTOs;
-
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 using Xunit;
@@ -25,10 +25,12 @@ public class ClientUniqueNameOnCreateUpdateTests : TestDbBase
 		
 		// THEN operation fails
 		Assert.False(result.IsSuccess);
+		var clientCount = await DataContext.Clients.CountAsync();
+		Assert.Equal(1, clientCount);
 	}
 	
 	[Fact]
-	public async Task Update_Client_With_Non_Unique_Name_Fails()
+	public async Task Update_Client_With_Existing_Name_Fails()
 	{
 		// GIVEN a DB with a client
 		await SeedClient("Name1");
