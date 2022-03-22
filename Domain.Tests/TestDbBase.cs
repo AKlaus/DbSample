@@ -11,6 +11,8 @@ using Respawn.Graph;
 using Xunit;
 using Xunit.Abstractions;
 
+#pragma warning disable CS8618
+
 namespace AK.DbSample.Domain.Tests;
 
 /// <summary>
@@ -21,7 +23,7 @@ public abstract class TestDbBase : TestBase, IAsyncLifetime
 {
 	protected DataContext DataContext => Container.GetRequiredService<DataContext>();
 	
-	protected Checkpoint CheckPoint = new Checkpoint
+	private readonly Checkpoint _checkPoint = new()
 		{
 			TablesToIgnore = new Table[] { "__EFMigrationHistory" }
 		};
@@ -85,11 +87,11 @@ public abstract class TestDbBase : TestBase, IAsyncLifetime
 	{
 		try
 		{
-			await CheckPoint.Reset(_sqlConnection);
+			await _checkPoint.Reset(_sqlConnection);
 		}
 		catch(Exception e)
 		{
-			Output.WriteLine(e.Message +" \n"+ (CheckPoint.DeleteSql ?? "no delete SQL"));
+			Output.WriteLine(e.Message +" \n"+ (_checkPoint.DeleteSql ?? "no delete SQL"));
 			throw;
 		} 
 	}
