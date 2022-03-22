@@ -1,0 +1,3 @@
+{
+    "ConnectionString": "Data Source=localhost;Initial Catalog=SampleDb;User Id=sa;Password=Secret_Passw0rd;Connection Timeout=30;TrustServerCertificate=true"
+}
