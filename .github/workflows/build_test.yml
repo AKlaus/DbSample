@@ -35,4 +35,4 @@ jobs:
       shell: bash
         
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test --no-build --no-restore --configuration Release --verbosity normal --collect "Code coverage"
