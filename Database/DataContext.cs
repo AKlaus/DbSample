@@ -1,5 +1,6 @@
 ﻿using AK.DbSample.Database.Entities;
 using AK.DbSample.Database.Infrastructure;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace AK.DbSample.Database;

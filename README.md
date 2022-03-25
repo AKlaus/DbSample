@@ -2,11 +2,11 @@
 
 **Example of EntityFramework-based back-end + automated tests against SQL Server in DevOps**
 
-![CI](https://github.com/AKlaus/DbSample/actions/workflows/build_test.yml/badge.svg)
+![CI](https://github.com/AKlaus/DbSample/actions/workflows/build_test.yml/badge.svg?branch=main)
 [![Test Coverage](https://coveralls.io/repos/github/AKlaus/DbSample/badge.svg?branch=main)](https://coveralls.io/github/AKlaus/DbSample?branch=main)
 
 Project shows examples of:
- - Automated DB tests for CRUD operation. 
+ - Automated DB tests for CRUD operations. 
  - A build pipeline to execute tests against an SQL Server instance.
 
 ## Overview of the solution

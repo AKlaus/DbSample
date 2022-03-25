@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 using Respawn;
 using Respawn.Graph;
+
 using Xunit;
 using Xunit.Abstractions;
 

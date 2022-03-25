@@ -28,7 +28,9 @@ else
   echo "Copy '$pathToWaitForIt' into the container '$pathToWaitForItInContainer'"
   docker cp "$pathToWaitForIt" sql-server:"$pathToWaitForItInContainer"
   echo "Wait for the TCP port to become available (or 30s timeout)"
+  # Note that we gotta add '--user root' for the `chmod` command
   docker exec -i --user root sql-server sh -c "chmod +x $pathToWaitForItInContainer && $pathToWaitForItInContainer localhost:1433 -t 30"
+  echo "Wait 1s extra as even after the port is available, the server still may need a moment"
   sleep 1
 fi
  

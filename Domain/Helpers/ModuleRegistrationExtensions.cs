@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AK.DbSample.Domain.Helpers

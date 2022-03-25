@@ -1,5 +1,6 @@
 using AK.DbSample.Domain.Helpers;
 using AK.DbSample.Domain.Services;
+
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AK.DbSample.Domain.Configuration;
