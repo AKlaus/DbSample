@@ -29,6 +29,7 @@ else
   docker cp "$pathToWaitForIt" sql-server:"$pathToWaitForItInContainer"
   echo "Wait for the TCP port to become available (or 30s timeout)"
   docker exec -i --user root sql-server sh -c "chmod +x $pathToWaitForItInContainer && $pathToWaitForItInContainer localhost:1433 -t 30"
+  sleep 1
 fi
  
 createDbSqlScriptInContainer="/home/CreateAndMigrateDataContext.sql"
