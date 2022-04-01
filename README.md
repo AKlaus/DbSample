@@ -9,6 +9,8 @@ Project shows examples of:
  - Automated DB tests for CRUD operations. 
  - A build pipeline to execute tests against an SQL Server instance.
 
+See "[Pain & Gain of automated tests against SQL (MS SQL or PostgreSQL)](https://alex-klaus.com/dotnet-sql-tests/)" article for a deeper explanation of the solution.
+
 ## Overview of the solution
 
 ### Solution structure
