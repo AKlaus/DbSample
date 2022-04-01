@@ -10,16 +10,15 @@ internal static partial class ServiceCollectionExtensions
 	public static AppSettings AddAndConfigureAppSettings(this IServiceCollection services, IConfiguration configuration)
 	{
 		services.AddOptions<AppSettings>()
+			.Bind(configuration, c => c.BindNonPublicProperties = true)
 			.ValidateDataAnnotations()
-			.ValidateOnStart();;
+			.ValidateOnStart();
 
-		services.Configure<AppSettings>(configuration, c => c.BindNonPublicProperties = true);
 		services.AddSingleton(r => r.GetRequiredService<IOptions<AppSettings>>().Value);
-		
-		// Makes IServiceProvider available in the container.
-		// Note that this step may resolve in duplicates of registered objects, so apply responsibly
-		var resolver = services.BuildServiceProvider();
 
+		// Makes IServiceProvider available in the container.
+		// Note that this step may resolve in duplicates of registered objects. It's safe to apply as the 1st step in building services
+		var resolver = services.BuildServiceProvider();
 		return resolver.GetRequiredService<AppSettings>();
 	}
 }
