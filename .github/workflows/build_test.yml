@@ -30,8 +30,8 @@ jobs:
     - name: Generate creation and migrations script
       run: dotnet ef migrations script -i -o CreateOrMigrateDatabase.sql --project Database/Database.csproj --startup-project Api/Api.csproj --context DataContext -v
 
-    - name: Launch SQL Server under Docker and create DB schema
-      run: sh ./devops/start_docker_sql_server_with_new_db.sh CreateOrMigrateDatabase.sql ./devops/wait-for-it.sh
+    - name: Launch SQL Server in Docker, create DB & schema, set ENV variable with the connection string
+      run: source ./devops/start_docker_sql_server_with_new_db.sh CreateOrMigrateDatabase.sql ./devops/wait-for-it.sh
       shell: bash
         
     - name: Test

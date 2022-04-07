@@ -43,3 +43,7 @@ echo "Create new database"
 docker exec -i sql-server /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P $saPassword -d master -Q "CREATE DATABASE $dbName"
 echo "Create schema in DB"
 docker exec -i sql-server /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P $saPassword -d $dbName -i "$createDbSqlScriptInContainer"
+
+# Note: To get the environment variable to persist after the script has completed, use `source ./script.sh`
+echo "Set 'ConnectionString' as environment variable"
+export ConnectionString="Data Source=localhost;Initial Catalog=$dbName;User Id=sa;Password=$saPassword;Connection Timeout=30;TrustServerCertificate=true"

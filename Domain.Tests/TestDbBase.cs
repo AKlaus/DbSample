@@ -111,6 +111,7 @@ public abstract class TestDbBase : TestBase, IAsyncLifetime
 	{
 		var settings = new ConfigurationBuilder()
 			.AddJsonFile("testsettings.json", optional: false)
+			.AddUserSecrets<TestDbBase>()
 			.AddEnvironmentVariables()
 			.Build();
 		return settings.GetSection("ConnectionString").Value;
