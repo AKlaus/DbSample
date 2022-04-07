@@ -54,7 +54,7 @@ source ./devops/start_docker_sql_server_with_new_db.sh CreateOrMigrateDatabase.s
 ```
 
 *NOTE* that `start_docker_sql_server_with_new_db.sh` specifies the database name and _sa_ password, and also adds an environment variable named `ConnectionString` with the connection string. <br>
-Alternatively, you can maintain the connection string in ([testsettings.json](./Domain.Tests/testsettings.json)).
+Alternatively, you can maintain the connection string in [testsettings.json](./Domain.Tests/testsettings.json).
 
 
 Here you go. The SQL Server with an empty database is available.
