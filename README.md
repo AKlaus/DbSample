@@ -44,21 +44,24 @@ Firstly, check out this Git repo and install dependencies:
 ```bash
 dotnet ef migrations script -i -o CreateOrMigrateDatabase.sql --project Database/Database.csproj --startup-project Api/Api.csproj --context DataContext -v
 ```
-2. Execute the script that
-   1. launches SQL server in Docker container
-   2. creates a new database
-   3. populates the DB with the schema from the provided script
+2. Execute a `bash` script that
+   1. launches SQL server in Docker container;
+   2. creates a new database;
+   3. populates the DB with the schema from the provided script;
+   4. sets an environment variable with SQL connection string for consuming in the tests.
 ```bash
-sh ./devops/start_docker_sql_server_with_new_db.sh CreateOrMigrateDatabase.sql
+source ./devops/start_docker_sql_server_with_new_db.sh CreateOrMigrateDatabase.sql
 ```
 
-Note that the default SQL credentials in `start_docker_sql_server_with_new_db.sh` match the ones in config files used to run the application ([appsettings.json](./Api/appsettings.json)) and execute tests ([testsettings.json](./Domain.Tests/testsettings.json)).
+*NOTE* that `start_docker_sql_server_with_new_db.sh` specifies the database name and _sa_ password, and also adds an environment variable named `ConnectionString` with the connection string. <br>
+Alternatively, you can maintain the connection string in ([testsettings.json](./Domain.Tests/testsettings.json)).
+
 
 Here you go. The SQL Server with an empty database is available.
 
 ### Run tests
 
-To run tests, the connection string in [testsettings.json](./Domain.Tests/testsettings.json) file has to point to the right instance of the database.  
+To run the tests, make sure that correct connection string is specified in [testsettings.json](./Domain.Tests/testsettings.json) file or environment variables.  
 
 Open the solution and run the tests from `Domain.Tests` project in your favourite IDE or via a command like
 ```bash
