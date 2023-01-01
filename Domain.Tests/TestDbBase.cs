@@ -23,15 +23,17 @@ namespace AK.DbSample.Domain.Tests;
 public abstract class TestDbBase : TestBase, IAsyncLifetime
 {
 	protected DataContext DataContext => Container.GetRequiredService<DataContext>();
-	
-	private readonly Checkpoint _checkPoint = new()
-		{
-			TablesToIgnore = new Table[] { "__EFMigrationHistory" }
-		};
-	
 	protected readonly ITestOutputHelper Output;
 	
-	private string _sqlConnection;
+	/// <summary>
+	/// 
+	/// </summary>
+	private Respawner _respawn; 
+	 
+	/// <summary>
+	///		Tables that shouldn't be touched on respawning the DB
+	/// </summary>
+	private readonly string[] _tablesToIgnore = { "__EFMigrationHistory" };
 
 	protected TestDbBase(ITestOutputHelper output)
 	{
@@ -43,8 +45,8 @@ public abstract class TestDbBase : TestBase, IAsyncLifetime
 	/// </summary>
 	protected override void ConfigureIocContainer(IServiceCollection services)
 	{
-		_sqlConnection = GetSqlConnectionStringFromConfiguration();
-		services.AddAndConfigureDbContext(_sqlConnection, false);
+		var sqlConnection = GetSqlConnectionStringFromConfiguration();
+		services.AddAndConfigureDbContext(sqlConnection, false);
 		base.ConfigureIocContainer(services);
 	}
 
@@ -88,11 +90,19 @@ public abstract class TestDbBase : TestBase, IAsyncLifetime
 	{
 		try
 		{
-			await _checkPoint.Reset(_sqlConnection);
+			var sqlConnection = DataContext.Database.GetConnectionString();
+			ArgumentNullException.ThrowIfNull(sqlConnection);
+			
+			_respawn = await Respawner.CreateAsync(sqlConnection, new RespawnerOptions { TablesToIgnore = _tablesToIgnore.Select(t => new Table(t)).ToArray() });
+		}
+		catch (ArgumentNullException ergExc)
+		{
+			Output.WriteLine(ergExc.Message);
+			throw;
 		}
 		catch(Exception e)
 		{
-			Output.WriteLine(e.Message +" \n"+ (_checkPoint.DeleteSql ?? "no delete SQL"));
+			Output.WriteLine(e.Message +" \n"+ (_respawn.DeleteSql ?? "no delete SQL"));
 			throw;
 		} 
 	}
