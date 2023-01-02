@@ -20,6 +20,7 @@ public class DataContext : DbContext
 			{
 				// Date is a DateOnly property and date on database
 				builder.Property(x => x.Date)
+					// These converters are still required in EF 7 (https://github.com/dotnet/efcore/issues/24507)
 					.HasConversion<DateOnlyConverter, DateOnlyComparer>();
 
 				// Set cascade delete
