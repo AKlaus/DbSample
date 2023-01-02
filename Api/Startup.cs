@@ -21,9 +21,10 @@ public class Startup
 		
 		services.AddAndConfigureDomainServices((settings.ConnectionString, true));
 
-		services
-			.AddControllers(options => options.UseDateOnlyTimeOnlyStringConverters())
-			.AddJsonOptions(options => options.UseDateOnlyTimeOnlyStringConverters());
+		// The below converters were required for .NET 6. Since .NET 7 they work out-of-the-box
+		//services
+		//	.AddControllers(options => options.UseDateOnlyTimeOnlyStringConverters())
+		//	.AddJsonOptions(options => options.UseDateOnlyTimeOnlyStringConverters());
 
 		services.AddAndConfigureSwagger(_hostingEnvironment);
 	}
