@@ -21,10 +21,13 @@ public class Startup
 		
 		services.AddAndConfigureDomainServices((settings.ConnectionString, true));
 
-		// The below converters were required for .NET 6. Since .NET 7 they work out-of-the-box
-		//services
-		//	.AddControllers(options => options.UseDateOnlyTimeOnlyStringConverters())
-		//	.AddJsonOptions(options => options.UseDateOnlyTimeOnlyStringConverters());
+		// The below converters were required for .NET 6. Since .NET 7 they work out-of-the-box,
+		// Swashbuckle is still lacking behind with the standard support, so need to keep these lines
+		// till Swashbuckle NuGet gets updated.
+		// Note: It'll also eliminate the need in DateOnlyTimeOnly.AspNet NuGet (https://github.com/maxkoshevoi/DateOnlyTimeOnly.AspNet) 
+		services
+			.AddControllers(options => options.UseDateOnlyTimeOnlyStringConverters())
+			.AddJsonOptions(options => options.UseDateOnlyTimeOnlyStringConverters());
 
 		services.AddAndConfigureSwagger(_hostingEnvironment);
 	}
