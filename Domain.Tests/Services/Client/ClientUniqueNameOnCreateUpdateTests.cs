@@ -18,7 +18,7 @@ public class ClientUniqueNameOnCreateUpdateTests : TestDbBase
 	public async Task Create_Client_With_Non_Unique_Name_Fails()
 	{
 		// GIVEN a DB with a client
-		var clientId = await SeedClient("Name");
+		await SeedClient("Name");
 		
 		// WHEN create a new client with the same name
 		var (_, result) = await ClientCommandService.Create(new CreateUpdateClientRequest("Name"));

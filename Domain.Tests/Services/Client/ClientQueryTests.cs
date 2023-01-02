@@ -32,14 +32,14 @@ public class ClientQueryTests : TestDbBase
 	public async Task Get_Clients_List_Works()
 	{
 		// GIVEN a DB with 2 clients
-		var client1Id = await SeedClient("Name1");
-		var client2Id = await SeedClient("Name2");
+		await SeedClient("Name1");
+		await SeedClient("Name2");
 		
 		// WHEN get a list of clients
 		var clients = await ClientQueryService.GetList(new GetClientListRequest());
 		
 		// THEN get 2 clients
 		Assert.Equal(2, clients.Length);
-		Assert.True(new[] {"Name1", "Name2"}.SequenceEqual<string>(clients.OrderBy(c => c.Name).Select(c=>c.Name)));
+		Assert.True(new[] {"Name1", "Name2"}.SequenceEqual(clients.OrderBy(c => c.Name).Select(c=>c.Name)));
 	}
 }

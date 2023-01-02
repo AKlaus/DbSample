@@ -16,7 +16,7 @@ public class DateOnlyComparer : ValueComparer<DateOnly>
 }
 
 /// <summary>
-///		Compares <see cref="DateOnly?" />.
+///		Compares <see cref="Nullable{DateOnly}" />.
 /// </summary>
 public class NullableDateOnlyComparer : ValueComparer<DateOnly?>
 {

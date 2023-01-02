@@ -23,15 +23,12 @@ namespace AK.DbSample.Domain.Tests;
 public abstract class TestDbBase : TestBase, IAsyncLifetime
 {
 	protected DataContext DataContext => Container.GetRequiredService<DataContext>();
-	
-	private readonly Checkpoint _checkPoint = new()
-		{
-			TablesToIgnore = new Table[] { "__EFMigrationHistory" }
-		};
-	
 	protected readonly ITestOutputHelper Output;
 	
-	private string _sqlConnection;
+	/// <summary>
+	///		Tables that shouldn't be touched on whipping out the DB
+	/// </summary>
+	private readonly Table[] _tablesToIgnore = { Microsoft.EntityFrameworkCore.Migrations.HistoryRepository.DefaultTableName /* "__EFMigrationsHistory" */ };
 
 	protected TestDbBase(ITestOutputHelper output)
 	{
@@ -43,8 +40,10 @@ public abstract class TestDbBase : TestBase, IAsyncLifetime
 	/// </summary>
 	protected override void ConfigureIocContainer(IServiceCollection services)
 	{
-		_sqlConnection = GetSqlConnectionStringFromConfiguration();
-		services.AddAndConfigureDbContext(_sqlConnection, false);
+		var sqlConnection = GetSqlConnectionStringFromConfiguration();
+		
+		services.AddAndConfigureDbContext(sqlConnection, false);
+		
 		base.ConfigureIocContainer(services);
 	}
 
@@ -86,13 +85,23 @@ public abstract class TestDbBase : TestBase, IAsyncLifetime
 	/// </summary>
 	protected async Task WipeOutDbAsync()
 	{
+		Respawner? respawn = null;
 		try
 		{
-			await _checkPoint.Reset(_sqlConnection);
+			var connectionString = DataContext.Database.GetConnectionString();
+			ArgumentNullException.ThrowIfNull(connectionString);
+			
+			respawn = await Respawner.CreateAsync(connectionString, new RespawnerOptions { TablesToIgnore = _tablesToIgnore });
+			await respawn.ResetAsync(connectionString);
+		}
+		catch (ArgumentNullException ergExc)
+		{
+			Output.WriteLine(ergExc.Message);
+			throw;
 		}
 		catch(Exception e)
 		{
-			Output.WriteLine(e.Message +" \n"+ (_checkPoint.DeleteSql ?? "no delete SQL"));
+			Output.WriteLine(e.Message +" \n"+ (respawn?.DeleteSql ?? "no delete SQL"));
 			throw;
 		} 
 	}
@@ -114,6 +123,6 @@ public abstract class TestDbBase : TestBase, IAsyncLifetime
 			.AddUserSecrets<TestDbBase>()
 			.AddEnvironmentVariables()
 			.Build();
-		return settings.GetSection("ConnectionString").Value;
+		return settings.GetSection("ConnectionString").Value!;
 	}
 }

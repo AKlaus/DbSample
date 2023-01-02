@@ -26,7 +26,7 @@ public class ClientCreateUpdateDeleteTests : TestDbBase
 		Assert.True(result.IsSuccess);
 		var client = await DataContext.Clients.FindAsync(clientId);
 		Assert.NotNull(client);
-		Assert.Equal("Test", client!.Name);
+		Assert.Equal("Test", client.Name);
 	}
 	
 	[Fact]
@@ -42,7 +42,7 @@ public class ClientCreateUpdateDeleteTests : TestDbBase
 		Assert.True(result.IsSuccess);
 		var client = await DataContext.Clients.FindAsync(clientId);
 		Assert.NotNull(client);
-		Assert.Equal("XYZ", client!.Name);
+		Assert.Equal("XYZ", client.Name);
 	}
 	
 	[Fact]
