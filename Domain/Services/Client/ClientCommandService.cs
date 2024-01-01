@@ -14,10 +14,8 @@ public interface IClientCommandService
 	Task<IDomainResult> Delete(long id);
 }
 
-public class ClientCommandService: BaseService, IClientCommandService
+public class ClientCommandService(DataContext dataContext) : BaseService(dataContext), IClientCommandService
 {
-	public ClientCommandService(DataContext dataContext) : base(dataContext) {}
-
 	public async Task<(long, IDomainResult)> Create(CreateUpdateClientRequest dto)
 	{
 		var nameCheckResult = await UniqueNameCheck(null, dto.Name);

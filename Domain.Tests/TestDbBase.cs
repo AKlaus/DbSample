@@ -1,6 +1,6 @@
 using AK.DbSample.Database;
+using AK.DbSample.Database.Configuration;
 using AK.DbSample.Database.Entities;
-using AK.DbSample.Domain.Configuration;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -20,21 +20,16 @@ namespace AK.DbSample.Domain.Tests;
 ///		Base test class with a DI container and DB connection.
 ///		Derive from it when need DI and DB connection
 /// </summary>
-public abstract class TestDbBase : TestBase, IAsyncLifetime
+public abstract class TestDbBase(ITestOutputHelper output) : TestBase, IAsyncLifetime
 {
 	protected DataContext DataContext => Container.GetRequiredService<DataContext>();
-	protected readonly ITestOutputHelper Output;
+	protected readonly ITestOutputHelper Output = output;
 	
 	/// <summary>
 	///		Tables that shouldn't be touched on whipping out the DB
 	/// </summary>
-	private readonly Table[] _tablesToIgnore = { Microsoft.EntityFrameworkCore.Migrations.HistoryRepository.DefaultTableName /* "__EFMigrationsHistory" */ };
+	private readonly Table[] _tablesToIgnore = [Microsoft.EntityFrameworkCore.Migrations.HistoryRepository.DefaultTableName /* "__EFMigrationsHistory" */];
 
-	protected TestDbBase(ITestOutputHelper output)
-	{
-		Output = output;
-	}
-	
 	/// <summary>
 	///     Configure the DI container
 	/// </summary>
@@ -83,7 +78,7 @@ public abstract class TestDbBase : TestBase, IAsyncLifetime
 	/// <summary>
 	///		Wipe out all data in the database
 	/// </summary>
-	protected async Task WipeOutDbAsync()
+	private async Task WipeOutDbAsync()
 	{
 		Respawner? respawn = null;
 		try

@@ -2,12 +2,7 @@ using AK.DbSample.Database;
 
 namespace AK.DbSample.Domain.Services;
 
-public abstract class BaseService
+public abstract class BaseService(DataContext dataContext)
 {
-	protected readonly DataContext DataContext;
-
-	protected BaseService(DataContext dataContext)
-	{
-		DataContext = dataContext;
-	}
+	protected readonly DataContext DataContext = dataContext;
 }

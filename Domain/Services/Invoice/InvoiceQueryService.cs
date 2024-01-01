@@ -13,10 +13,8 @@ public interface IInvoiceQueryService
 	Task<GetInvoiceListResponse[]> GetList(GetInvoiceListRequest filter);
 }
 
-public class InvoiceQueryService: BaseService, IInvoiceQueryService
+public class InvoiceQueryService(DataContext dataContext) : BaseService(dataContext), IInvoiceQueryService
 {
-	public InvoiceQueryService(DataContext dataContext) : base(dataContext) {}
-
 	public async Task<(GetInvoiceByNumberResponse, IDomainResult)> GetByNumber(string number)
 	{
 		var invoice = await DataContext.Invoices

@@ -1,3 +1,4 @@
+// ReSharper disable NotAccessedPositionalProperty.Global
 namespace AK.DbSample.Domain.Services.Invoice.DTOs;
 
 public record GetInvoiceListRequest(long? ClientId = null);
