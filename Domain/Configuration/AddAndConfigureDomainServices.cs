@@ -1,3 +1,4 @@
+using AK.DbSample.Database.Configuration;
 using AK.DbSample.Domain.Helpers;
 using AK.DbSample.Domain.Services;
 
@@ -5,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace AK.DbSample.Domain.Configuration;
 
-public static partial class ServiceCollectionExtensions
+public static class ServiceCollectionExtensions
 {
 	public static IServiceCollection AddAndConfigureDomainServices(this IServiceCollection services, (string? connectionString, bool registerMigrationsAssembly)? configureDatabase = null)
 	{
