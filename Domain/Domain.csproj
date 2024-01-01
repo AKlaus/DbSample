@@ -7,13 +7,13 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Database\Database.csproj">
+			<!-- Prevent exposing the DB entities to the projects referring to `Domain` (e.g. `API` proj) -->
 			<PrivateAssets>all</PrivateAssets>
 		</ProjectReference>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="DomainResult.Common" Version="3.1.0" />
-	  <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.1" />
+	  <PackageReference Include="DomainResult.Common" Version="3.2.0" />
 	</ItemGroup>
 
 </Project>

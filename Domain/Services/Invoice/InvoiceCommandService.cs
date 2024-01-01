@@ -14,10 +14,8 @@ public interface IInvoiceCommandService
 	Task<IDomainResult> Delete(string number);
 }
 
-public class InvoiceCommandService: BaseService, IInvoiceCommandService
+public class InvoiceCommandService(DataContext dataContext) : BaseService(dataContext), IInvoiceCommandService
 {
-	public InvoiceCommandService(DataContext dataContext) : base(dataContext) {}
-
 	public async Task<(string, IDomainResult)> Create(CreateInvoiceRequest dto)
 	{
 		var numberCheckResult = await UniqueNumberCheck(dto.Number, true);

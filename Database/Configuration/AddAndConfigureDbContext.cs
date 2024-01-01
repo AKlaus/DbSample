@@ -1,9 +1,7 @@
-using AK.DbSample.Database;
-
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AK.DbSample.Domain.Configuration;
+namespace AK.DbSample.Database.Configuration;
 
 public static partial class ServiceCollectionExtensions
 {

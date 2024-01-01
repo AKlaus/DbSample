@@ -13,10 +13,8 @@ public interface IClientQueryService
 	Task<GetClientListResponse[]> GetList(GetClientListRequest filter);
 }
 
-public class ClientQueryService: BaseService, IClientQueryService
+public class ClientQueryService(DataContext dataContext) : BaseService(dataContext), IClientQueryService
 {
-	public ClientQueryService(DataContext dataContext) : base(dataContext) {}
-
 	public async Task<(GetClientByIdResponse, IDomainResult)> GetById(long clientId)
 	{
 		var client = await DataContext.Clients

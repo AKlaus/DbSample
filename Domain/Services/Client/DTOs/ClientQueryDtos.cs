@@ -1,3 +1,4 @@
+// ReSharper disable NotAccessedPositionalProperty.Global
 namespace AK.DbSample.Domain.Services.Client.DTOs;
 
 public record GetClientListRequest(string? Name = null);
