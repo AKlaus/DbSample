@@ -7,8 +7,10 @@
 
 	<ItemGroup>
 		<PackageReference Include="DomainResult" Version="3.2.0" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+		<!-- The EF references below are required for generating the migration script only -->
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>

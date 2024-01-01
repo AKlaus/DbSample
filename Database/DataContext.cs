@@ -1,5 +1,4 @@
 ﻿using AK.DbSample.Database.Entities;
-using AK.DbSample.Database.Infrastructure;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -20,8 +19,7 @@ public class DataContext : DbContext
 			{
 				// Date is a DateOnly property and date on database
 				builder.Property(x => x.Date)
-					// These converters are still required in EF 7 (https://github.com/dotnet/efcore/issues/24507)
-					.HasConversion<DateOnlyConverter, DateOnlyComparer>();
+					   .HasColumnType("date");
 
 				// Set cascade delete
 				builder.HasOne(p => p.Client)

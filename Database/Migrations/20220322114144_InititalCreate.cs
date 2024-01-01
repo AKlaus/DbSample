@@ -28,7 +28,7 @@ namespace AK.DbSample.Database.Migrations
                 {
                     Number = table.Column<string>(type: "nvarchar(100)", nullable: false),
                     ClientId = table.Column<long>(type: "bigint", nullable: false),
-                    Date = table.Column<DateTime>(type: "datetime", nullable: false),
+                    Date = table.Column<DateOnly>(type: "date", nullable: false),
                     Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
