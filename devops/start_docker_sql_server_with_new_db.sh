@@ -4,7 +4,7 @@ saPassword="Secret_Passw0rd"
 dbName="SampleDb"
 
 if [ -z "$1" ]; then
-  echo "Provide path to a SQL script for creating DB schema"
+  echo "ERROR! No path to a SQL script for creating DB schema. Provide as a parameter"
   exit 1
 fi
 createDbSqlScript="$1"
