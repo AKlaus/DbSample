@@ -27,10 +27,7 @@ namespace AK.DbSample.Domain.Helpers
 		/// </remarks>
 		public static bool IsAssignableTo<T>(this Type @this)
 		{
-			if (@this == null)
-			{
-				throw new ArgumentNullException(nameof(@this));
-			}
+			ArgumentNullException.ThrowIfNull(@this);
 
 			return typeof(T).IsAssignableFrom(@this);
 		}
