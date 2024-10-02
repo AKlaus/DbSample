@@ -17,7 +17,7 @@ else
 fi
 
 echo "Pull & launch the SQL server image"
-docker run --name sql-server -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=$saPassword" -e "MSSQL_PID=Express" -p 1433:1433 -d mcr.microsoft.com/mssql/server:latest
+docker run --name sql-server -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=$saPassword" -e "MSSQL_PID=Express" -p 1433:1433 -d mcr.microsoft.com/mssql/server:2019-CU27-ubuntu-20.04
 
 if [ -z "$pathToWaitForIt" ]; then
   echo "Wait 10s for the SQL Server to get started"
