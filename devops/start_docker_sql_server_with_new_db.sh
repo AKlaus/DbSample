@@ -17,7 +17,7 @@ else
 fi
 
 echo "Pull & launch the SQL server image"
-docker run --name sql-server -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=$saPassword" -e "MSSQL_PID=Express" -p 1433:1433 -d mcr.microsoft.com/mssql/server:2019-CU27-ubuntu-20.04
+docker run --name sql-server -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=$saPassword" -e "MSSQL_PID=Express" -p 1433:1433 -d mcr.microsoft.com/mssql/server:2022-CU16-ubuntu-22.04
 
 if [ -z "$pathToWaitForIt" ]; then
   echo "Wait 10s for the SQL Server to get started"
@@ -40,9 +40,9 @@ echo "Copy '$createDbSqlScript' into the container"
 docker cp "$createDbSqlScript" sql-server:"$createDbSqlScriptInContainer"
 
 echo "Create new database"
-docker exec -i sql-server /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P $saPassword -d master -Q "CREATE DATABASE $dbName"
+docker exec -i sql-server /opt/mssql-tools18/bin/sqlcmd -C -S localhost -U sa -P $saPassword -d master -Q "CREATE DATABASE $dbName"
 echo "Create schema in DB"
-docker exec -i sql-server /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P $saPassword -d $dbName -i "$createDbSqlScriptInContainer"
+docker exec -i sql-server /opt/mssql-tools18/bin/sqlcmd -C -S localhost -U sa -P $saPassword -d $dbName -b -m-1 -r0 -e -i "$createDbSqlScriptInContainer"
 
 # Note: To get the environment variable to persist after the script has completed, use `source ./script.sh`
 echo "Set 'ConnectionString' as environment variable"
