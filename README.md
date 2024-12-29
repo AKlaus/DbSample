@@ -25,8 +25,8 @@ See "[Pain & Gain of automated tests against SQL (MS SQL or PostgreSQL)](https:/
 ### Technologies
 
  - Main project: 
-   - [.NET 8](https://docs.microsoft.com/en-us/dotnet/core/whats-new/dotnet-8);
-   - [Entity Framework Core 8](https://docs.microsoft.com/en-us/ef/core/) and [dotnet-ef](https://docs.microsoft.com/en-us/ef/core/cli/dotnet) CLI.
+   - [.NET 9](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-9/overview);
+   - [Entity Framework Core 9](https://docs.microsoft.com/en-us/ef/core/) and [dotnet-ef](https://docs.microsoft.com/en-us/ef/core/cli/dotnet) CLI.
  - Test project:
    - [xUnit](https://xunit.net/) + [Respawn](https://github.com/jbogard/Respawn);
    - [Docker](https://www.docker.com/) + [SQL Server image](https://hub.docker.com/_/microsoft-mssql-server).
@@ -34,7 +34,7 @@ See "[Pain & Gain of automated tests against SQL (MS SQL or PostgreSQL)](https:/
 ## Getting Started (locally)
 
 Firstly, check out this Git repo and install dependencies:
- - [.NET SDK](https://dotnet.microsoft.com/download) v8.x;
+ - [.NET SDK](https://dotnet.microsoft.com/download) v9.x;
  - [dotnet-ef](https://docs.microsoft.com/en-us/ef/core/cli/dotnet) CLI;
  - [Docker](https://www.docker.com/).
 
