@@ -73,7 +73,7 @@ public class InvoiceCommandService(DataContext dataContext) : BaseService(dataCo
 		if (string.IsNullOrWhiteSpace(newNumber))
 			return IDomainResult.Failed("Number can't be empty");
 		
-		if (await DataContext.Invoices.Where(c => c.Number == newNumber).AnyAsync()
+		if (await DataContext.Invoices.AsNoTracking().Where(c => c.Number == newNumber).AnyAsync()
 		    && creatingNew)
 			return IDomainResult.Failed($"Invoice number '{newNumber}' already exists");
 		
@@ -82,7 +82,7 @@ public class InvoiceCommandService(DataContext dataContext) : BaseService(dataCo
 
 	private async Task<IDomainResult> ClientExistsCheck(long clientId)
 	{
-		return !await DataContext.Clients.Where(c => c.Id == clientId).AnyAsync()
+		return !await DataContext.Clients.AsNoTracking().Where(c => c.Id == clientId).AnyAsync()
 			? IDomainResult.NotFound("Client not found")
 			: IDomainResult.Success();
 	}

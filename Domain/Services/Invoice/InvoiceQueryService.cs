@@ -19,6 +19,7 @@ public class InvoiceQueryService(DataContext dataContext) : BaseService(dataCont
 	{
 		var invoice = await DataContext.Invoices
 				.Include(i => i.Client)
+				.AsNoTracking()
 				.SingleOrDefaultAsync(c => c.Number == number);
 		if (invoice == null)
 			return IDomainResult.NotFound<GetInvoiceByNumberResponse>("Invoice not found");
@@ -36,6 +37,7 @@ public class InvoiceQueryService(DataContext dataContext) : BaseService(dataCont
 	{
 		var query = DataContext.Invoices
 				.Include(i => i.Client)
+				.AsNoTracking()
 				.Select(i => i);
 		if (filter.ClientId != null)
 			query = query.Where(i => i.ClientId == filter.ClientId);

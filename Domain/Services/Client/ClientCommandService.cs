@@ -62,7 +62,7 @@ public class ClientCommandService(DataContext dataContext) : BaseService(dataCon
 		if (string.IsNullOrWhiteSpace(name))
 			return IDomainResult.Failed("Name can't be empty");
 		
-		var clientsQuery = DataContext.Clients.Where(c => c.Name == name);
+		var clientsQuery = DataContext.Clients.AsNoTracking().Where(c => c.Name == name);
 		if (id.HasValue)
 			clientsQuery = clientsQuery.Where(c => c.Id != id);
 		
