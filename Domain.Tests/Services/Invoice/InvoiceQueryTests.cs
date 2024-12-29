@@ -18,10 +18,10 @@ public class InvoiceQueryTests : TestDbBase
 	{
 		// GIVEN a client & an invoice
 		var clientId = await SeedClient("Name");
-		var (invoiceId, _) = await InvoiceCommandService.Create(new CreateInvoiceRequest("INV-01", DateOnly.Parse("2020-07-07"), clientId, 20));
+		await SeedInvoice("INV-01", clientId, DateOnly.Parse("2020-07-07"), 20);
 		
 		// WHEN get invoice by number
-		var (invoice, result) = await InvoiceQueryService.GetByNumber(invoiceId);
+		var (invoice, result) = await InvoiceQueryService.GetByNumber("INV-01");
 		
 		// THEN invoice gets resolved
 		Assert.True(result.IsSuccess);
@@ -33,8 +33,8 @@ public class InvoiceQueryTests : TestDbBase
 	{
 		// GIVEN a client & 2 invoices
 		var clientId = await SeedClient("Name");
-		await InvoiceCommandService.Create(new CreateInvoiceRequest("INV-01", DateOnly.Parse("2020-07-07"), clientId, 10));
-		await InvoiceCommandService.Create(new CreateInvoiceRequest("INV-02", DateOnly.Parse("2020-08-07"), clientId, 20));
+		await SeedInvoice("INV-01", clientId, DateOnly.Parse("2020-07-07"), 10);
+		await SeedInvoice("INV-02", clientId, DateOnly.Parse("2020-08-07"), 20);
 		
 		// WHEN get a list of invoices
 		var invoices = await InvoiceQueryService.GetList(new GetInvoiceListRequest());
@@ -42,9 +42,9 @@ public class InvoiceQueryTests : TestDbBase
 		// THEN get 2 invoices
 		Assert.Equal(2, invoices.Length);
 		var orderedList = invoices.OrderBy(c => c.Number).ToArray();
-		Assert.True(new[] {"INV-01", "INV-02"}.SequenceEqual(orderedList.Select(c => c.Number)));
-		Assert.True(new[] {DateOnly.Parse("2020-07-07"), DateOnly.Parse("2020-08-07")}.SequenceEqual(orderedList.Select(c => c.Date)));
-		Assert.True(new[] {10m, 20m}.SequenceEqual(orderedList.Select(c => c.Amount)));
+		Assert.Equal(new[] {"INV-01", "INV-02"}, orderedList.Select(c => c.Number));
+		Assert.Equal(new[] {DateOnly.Parse("2020-07-07"), DateOnly.Parse("2020-08-07")}, orderedList.Select(c => c.Date));
+		Assert.Equal(new[] {10m, 20m}, orderedList.Select(c => c.Amount));
 	}
 	
 	[Fact]
@@ -52,10 +52,10 @@ public class InvoiceQueryTests : TestDbBase
 	{
 		// GIVEN a client 1 with an invoice
 		var client1Id = await SeedClient("Homer Simpson");
-		await InvoiceCommandService.Create(new CreateInvoiceRequest("INV-01", DateOnly.Parse("2020-07-07"), client1Id, 10));
+		await SeedInvoice("INV-01", client1Id, DateOnly.Parse("2020-07-07"), 10);
 		// and a client 2 with an invoice
 		var client2Id = await SeedClient("Marge Simpson");
-		await InvoiceCommandService.Create(new CreateInvoiceRequest("INV-02", DateOnly.Parse("2020-08-07"), client2Id, 20));
+		await SeedInvoice("INV-02", client2Id, DateOnly.Parse("2020-08-07"), 20);
 		
 		// WHEN get a list of invoices for client 1
 		var invoices = await InvoiceQueryService.GetList(new GetInvoiceListRequest(client1Id));

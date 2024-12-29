@@ -20,10 +20,10 @@ namespace AK.DbSample.Domain.Tests;
 ///		Base test class with a DI container and DB connection.
 ///		Derive from it when need DI and DB connection
 /// </summary>
-public abstract class TestDbBase(ITestOutputHelper output) : TestBase, IAsyncLifetime
+// ReSharper disable once InconsistentNaming
+public abstract class TestDbBase(ITestOutputHelper _output) : TestBase, IAsyncLifetime
 {
-	protected DataContext DataContext => Container.GetRequiredService<DataContext>();
-	protected readonly ITestOutputHelper Output = output;
+	private DataContext DataContext => Container.GetRequiredService<DataContext>();
 	
 	/// <summary>
 	///		Tables that shouldn't be touched on whipping out the DB
@@ -42,12 +42,21 @@ public abstract class TestDbBase(ITestOutputHelper output) : TestBase, IAsyncLif
 		base.ConfigureIocContainer(services);
 	}
 
-	protected async Task SeedData(params object[] entities)
-	{
-		await DataContext.AddRangeAsync(entities);
-		await DataContext.SaveChangesAsync();
-	}
+	/// <summary>
+	///		Seed an invoice in the DB
+	/// </summary>
+	protected Task SeedInvoice(string number, long clientId, DateOnly date, decimal amount)
+		=> SeedData (new Invoice
+			{
+				Number = number, 
+				ClientId = clientId,
+				Amount = amount,
+				Date = date
+			});
 
+	/// <summary>
+	///		Seed a client in the DB
+	/// </summary>
 	protected async Task<long> SeedClient(string name = "Test Client 1")
 	{
 		await SeedData(new Client { Name = name });
@@ -91,12 +100,12 @@ public abstract class TestDbBase(ITestOutputHelper output) : TestBase, IAsyncLif
 		}
 		catch (ArgumentNullException ergExc)
 		{
-			Output.WriteLine(ergExc.Message);
+			_output.WriteLine(ergExc.Message);
 			throw;
 		}
 		catch(Exception e)
 		{
-			Output.WriteLine(e.Message +" \n"+ (respawn?.DeleteSql ?? "no delete SQL"));
+			_output.WriteLine(e.Message +" \n"+ (respawn?.DeleteSql ?? "no delete SQL"));
 			throw;
 		} 
 	}
@@ -110,6 +119,29 @@ public abstract class TestDbBase(ITestOutputHelper output) : TestBase, IAsyncLif
 		
 		base.Dispose(disposing);
 	}
+
+	/// <summary>
+	///		Perform <paramref name="dataContextFunc"/> on a new scope of DataContext, to avoid skewed test results due to the EF cache.  
+	/// </summary>
+	/// <param name="dataContextFunc"> The function to perform on the newly created DAtaContext scope </param>
+	protected async Task ScopedDataContextExecAsync(Func<DataContext, Task> dataContextFunc)
+	{
+		using var assertionScope = Container.CreateScope();
+		await using var dataContext = assertionScope.ServiceProvider.GetRequiredService<DataContext>();
+		{
+			// Disable change tracking
+			dataContext.ChangeTracker.AutoDetectChangesEnabled = false;
+			await dataContextFunc(dataContext);
+		}
+	}
+
+	private Task SeedData(params object[] entities)
+		=> ScopedDataContextExecAsync(
+			async context =>
+			{
+				await context.AddRangeAsync(entities);
+				await context.SaveChangesAsync();
+			});
 	
 	private string GetSqlConnectionStringFromConfiguration()
 	{

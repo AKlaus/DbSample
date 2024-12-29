@@ -24,9 +24,13 @@ public class ClientCreateUpdateDeleteTests : TestDbBase
 		
 		// THEN client appears in the DB
 		Assert.True(result.IsSuccess);
-		var client = await DataContext.Clients.FindAsync(clientId);
-		Assert.NotNull(client);
-		Assert.Equal("Test", client.Name);
+		await ScopedDataContextExecAsync(
+			async context =>
+			{
+				var client = await context.Clients.FindAsync(clientId);
+				Assert.NotNull(client);
+				Assert.Equal("Test", client.Name);
+			});
 	}
 	
 	[Fact]
@@ -40,9 +44,13 @@ public class ClientCreateUpdateDeleteTests : TestDbBase
 		
 		// THEN the name is updated
 		Assert.True(result.IsSuccess);
-		var client = await DataContext.Clients.FindAsync(clientId);
-		Assert.NotNull(client);
-		Assert.Equal("XYZ", client.Name);
+		await ScopedDataContextExecAsync(
+			async context =>
+			{
+				var client = await context.Clients.FindAsync(clientId);
+				Assert.NotNull(client);
+				Assert.Equal("XYZ", client.Name);
+			});
 	}
 	
 	[Fact]
@@ -56,7 +64,11 @@ public class ClientCreateUpdateDeleteTests : TestDbBase
 		
 		// THEN the client cease to exist
 		Assert.True(result.IsSuccess);
-		var client = await DataContext.Clients.FindAsync(clientId);
-		Assert.Null(client);
+		await ScopedDataContextExecAsync(
+			async context =>
+			{
+				var client = await context.Clients.FindAsync(clientId);
+				Assert.Null(client);
+			});
 	}
 }

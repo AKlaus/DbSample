@@ -40,6 +40,6 @@ public class ClientQueryTests : TestDbBase
 		
 		// THEN get 2 clients
 		Assert.Equal(2, clients.Length);
-		Assert.True(new[] {"Name1", "Name2"}.SequenceEqual(clients.OrderBy(c => c.Name).Select(c=>c.Name)));
+		Assert.Equal(new[] {"Name1", "Name2"}, clients.OrderBy(c => c.Name).Select(c=>c.Name));
 	}
 }
