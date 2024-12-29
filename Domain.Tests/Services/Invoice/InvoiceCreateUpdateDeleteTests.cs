@@ -24,12 +24,16 @@ public class InvoiceCreateUpdateDeleteTests : TestDbBase
 		
 		// THEN client appears in the DB
 		Assert.True(result.IsSuccess);
-		var invoice = (await DataContext.Invoices.FindAsync(invoiceId))!;
-		Assert.NotNull(invoice);
-		Assert.Equal("INV-01", invoice.Number);
-		Assert.Equal(DateOnly.Parse("2020-07-07"), invoice.Date);
-		Assert.Equal(clientId, invoice.ClientId);
-		Assert.Equal(20, invoice.Amount);
+		await ScopedDataContextExecAsync(
+			async context =>
+			{
+				var invoice = await context.Invoices.FindAsync(invoiceId);
+				Assert.NotNull(invoice);
+				Assert.Equal("INV-01", invoice.Number);
+				Assert.Equal(DateOnly.Parse("2020-07-07"), invoice.Date);
+				Assert.Equal(clientId, invoice.ClientId);
+				Assert.Equal(20, invoice.Amount);
+			});
 	}
 	
 	[Fact]
@@ -37,16 +41,20 @@ public class InvoiceCreateUpdateDeleteTests : TestDbBase
 	{
 		// GIVEN a client & an invoice
 		var clientId = await SeedClient("Name");
-		var (invoiceId, _) = await InvoiceCommandService.Create(new CreateInvoiceRequest("INV-01", DateOnly.Parse("2020-07-07"), clientId, 20));
+		await SeedInvoice("INV-01", clientId, DateOnly.Parse("2020-07-07"), 20);
 		
 		// WHEN update amount of the invoice
-		var result = await InvoiceCommandService.Update(invoiceId, new UpdateInvoiceRequest(DateOnly.Parse("2020-07-07"), 30));
+		var result = await InvoiceCommandService.Update("INV-01", new UpdateInvoiceRequest(DateOnly.Parse("2020-07-07"), 30));
 		
 		// THEN the amount is updated
 		Assert.True(result.IsSuccess);
-		var invoice = (await DataContext.Invoices.FindAsync(invoiceId))!;
-		Assert.NotNull(invoice);
-		Assert.Equal(30, invoice.Amount);
+		await ScopedDataContextExecAsync(
+			async context =>
+			{
+				var invoice = await context.Invoices.FindAsync("INV-01");
+				Assert.NotNull(invoice);
+				Assert.Equal(30, invoice.Amount);
+			});
 	}
 	
 	[Fact]
@@ -54,14 +62,18 @@ public class InvoiceCreateUpdateDeleteTests : TestDbBase
 	{
 		// GIVEN a client & an invoice
 		var clientId = await SeedClient("Name");
-		var (invoiceId, _) = await InvoiceCommandService.Create(new CreateInvoiceRequest("INV-01", DateOnly.Parse("2020-07-07"), clientId, 20));
+		await SeedInvoice("INV-01", clientId, DateOnly.Parse("2020-07-07"), 20);
 		
 		// WHEN delete the invoice
-		var result = await InvoiceCommandService.Delete(invoiceId);
+		var result = await InvoiceCommandService.Delete("INV-01");
 		
 		// THEN the invoice cease to exist
 		Assert.True(result.IsSuccess);
-		var client = await DataContext.Invoices.FindAsync(invoiceId);
-		Assert.Null(client);
+		await ScopedDataContextExecAsync(
+			async context =>
+			{
+				var client = await context.Invoices.FindAsync("INV-01");
+				Assert.Null(client);
+			});
 	}
 }

@@ -25,8 +25,12 @@ public class ClientUniqueNameOnCreateUpdateTests : TestDbBase
 		
 		// THEN operation fails
 		Assert.False(result.IsSuccess);
-		var clientCount = await DataContext.Clients.CountAsync();
-		Assert.Equal(1, clientCount);
+		await ScopedDataContextExecAsync(
+			async context =>
+			{
+				var clientCount = await context.Clients.CountAsync();
+				Assert.Equal(1, clientCount);
+			});
 	}
 	
 	[Fact]

@@ -19,6 +19,7 @@ public class ClientQueryService(DataContext dataContext) : BaseService(dataConte
 	{
 		var client = await DataContext.Clients
 				.Include(c => c.Invoices)
+				.AsNoTracking()
 				.SingleOrDefaultAsync(c => c.Id == clientId);
 		if (client == null)
 			return IDomainResult.NotFound<GetClientByIdResponse>("Client not found");
@@ -31,6 +32,7 @@ public class ClientQueryService(DataContext dataContext) : BaseService(dataConte
 	public async Task<GetClientListResponse[]> GetList(GetClientListRequest filter)
 	{
 		var query = from c in DataContext.Clients.Include(c => c.Invoices)
+				.AsNoTracking()
 				select new GetClientListResponse(
 						c.Id, 
 						c.Name,
